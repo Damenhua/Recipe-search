@@ -2,7 +2,7 @@
 
 ## 專案介紹
 
-Forkify 是一個基於 Web 的應用程式，允許用戶搜尋、瀏覽和保存食譜。這個專案是使用 JavaScript 和現代開發工具（如 Webpack、Babel 和 ESLint）構建的。
+允許用戶搜尋、瀏覽和保存食譜。這個專案是使用 JavaScript 和現代開發工具 parcel 構建的。
 
 ## 主要功能
 
@@ -13,8 +13,8 @@ Forkify 是一個基於 Web 的應用程式，允許用戶搜尋、瀏覽和保�
 ## 技術棧
 
 - **前端**：
-    - HTML
-    - CSS
-    - JavaScript
-    - Parcel
-    
+  - HTML
+  - CSS
+  - JavaScript
+  - Parcel
+  - git
