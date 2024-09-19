@@ -1,0 +1,49 @@
+node_modules
+dist
+.parcel-cache
+.DS_Store
+
+# 操作系統生成的檔案
+Thumbs.db
+
+# 編輯器和 IDE 生成的檔案
+.vscode/
+.idea/
+*.swp
+
+# 依賴管理和構建工具生成的檔案
+package-lock.json
+yarn.lock
+build/
+
+# 編譯生成的檔案
+*.class
+*.pyc
+*.o
+
+# 日誌檔案
+*.log
+logs/
+
+# 環境配置檔案
+.env
+.env.local
+
+# 暫存檔案
+tmp/
+temp/
+
+# 個人配置檔案
+.npmrc
+.yarnrc
+
+# 測試覆蓋率報告
+coverage/
+
+# 敏感資訊
+config.json
+
+# 大型媒體檔案
+*.mp4
+*.mov
+*.psd
