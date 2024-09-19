@@ -2,6 +2,10 @@ node_modules
 dist
 .parcel-cache
 .DS_Store
+forkify-architecture-recipe-loading.png
+forkify-flowchart-part-1.png
+forkify-flowchart-part-2.png
+forkify-flowchart-part-3.png
 
 # 操作系統生成的檔案
 Thumbs.db
