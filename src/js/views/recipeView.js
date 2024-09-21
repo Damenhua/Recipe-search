@@ -12,6 +12,10 @@ class RecipeView {
     this.#parentEL.insertAdjacentHTML('afterbegin', markup);
   }
 
+  #clear() {
+    this.#parentEL.innerHTML = '';
+  }
+
   renderSpinner = function () {
     const markup = `
       <div class="spinner">
@@ -24,8 +28,8 @@ class RecipeView {
     this.#parentEL.insertAdjacentHTML('afterbegin', markup);
   };
 
-  #clear() {
-    this.#parentEL.innerHTML = '';
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
   #generatrMarkup() {
