@@ -11,7 +11,6 @@ export const state = {
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}/${id}`);
-    console.log(data);
     let { recipe } = data.data;
 
     state.recipe = {
@@ -24,7 +23,6 @@ export const loadRecipe = async function (id) {
       cookingTime: recipe.cooking_time,
       ingredients: recipe.ingredients,
     };
-    console.log(state.recipe);
   } catch (err) {
     console.error(`${err}`);
     throw err;
@@ -34,7 +32,6 @@ export const loadRecipe = async function (id) {
 export const loadSearchResults = async function (query) {
   try {
     const data = await getJSON(`${API_URL}?search=${query}`);
-    console.log(data);
     state.search.results = data.data.recipes.map(data => {
       return {
         id: data.id,
@@ -43,7 +40,6 @@ export const loadSearchResults = async function (query) {
         image: data.image_url,
       };
     });
-    console.log(state.search.results);
   } catch (err) {
     console.error(`${err}`);
     throw err;

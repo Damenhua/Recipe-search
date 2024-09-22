@@ -27,13 +27,18 @@ const controlRecipe = async function () {
   }
 };
 
-// 3) Searching for results
+//  Searching for results
 const controlSearchResults = async function () {
   try {
+    // 1) Get searched query
     const query = searchView.getQuery();
     if (!query) return;
 
-    model.loadSearchResults(`${query}`);
+    // 2) load search results
+    await model.loadSearchResults(`${query}`);
+
+    // 3) render results
+    console.log(model.state.search.results);
   } catch (err) {
     console.error(err);
   }
@@ -41,7 +46,7 @@ const controlSearchResults = async function () {
 
 const init = function () {
   recipeView.addHandlerRender(controlRecipe);
-  searchView.addHandlerSearch(controlSearchResults)
+  searchView.addHandlerSearch(controlSearchResults);
 };
 
 init();
