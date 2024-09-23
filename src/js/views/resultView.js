@@ -1,7 +1,6 @@
 import View from './View.js';
 import icons from 'url:../../img/icons.svg';
 
-
 class ResultView extends View {
   _parentEL = document.querySelector('.results');
   _errorMessage = 'No recipes found for your query. Please try again!';
@@ -9,12 +8,10 @@ class ResultView extends View {
 
   _generateMarkup() {
     console.log(this._data);
-    return this._data.map(this._generateMarkupPreview).join("")
-
-    
+    return this._data.map(this._generateMarkupPreview).join('');
   }
 
-  _generateMarkupPreview(result){
+  _generateMarkupPreview(result) {
     return `
         <li class="preview">
             <a class="preview__link preview__link--active" href="#${result.id}">

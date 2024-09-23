@@ -2,7 +2,7 @@ import * as model from './model.js';
 import searchView from './views/searchView.js';
 import recipeView from './views/recipeView.js';
 import resultView from './views/resultView.js';
-
+import paginationView from './views/paginationView.js';
 import 'core-js/actual';
 
 if (module.hot) {
@@ -47,7 +47,10 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(`${query}`);
 
     // 3) render results
-    resultView.render(model.getSearchResultsPage());
+    resultView.render(model.getSearchResultsPage(1));
+
+    // 4) render initial pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     console.error(err);
   }
