@@ -56,6 +56,7 @@ const controlSearchResults = async function () {
 };
 
 const controlPagination = function (goToPage) {
+  
   // 1) render NEW results
   resultView.render(model.getSearchResultsPage(goToPage));
 
@@ -64,11 +65,13 @@ const controlPagination = function (goToPage) {
 };
 
 const controlServings = function (newServings) {
-  // update the recipe servings (in state)
+
+  // 1)update the recipe servings (in state)
   model.updateServings(newServings);
-  // render recipe
-  recipeView.render(model.state.recipe);
-  console.log(newServings);
+
+  // 2) render recipe
+  // recipeView.render(model.state.recipe) // no need to render whole recipe page, just update the servings
+  recipeView.update(model.state.recipe);
 };
 
 const init = function () {

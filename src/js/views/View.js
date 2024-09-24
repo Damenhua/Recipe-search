@@ -12,6 +12,44 @@ export default class ResultView {
     this._parentEL.insertAdjacentHTML('afterbegin', markup);
   }
 
+  update(data) {
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderError();
+
+    this._data = data;
+    const newMarkup = this._generateMarkup();
+
+    // creat virtual DOM
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    console.log(newDOM);
+
+    //get all elements from new DOM,and array from
+    const newElements = Array.from(newDOM.querySelectorAll('*'));
+    // this old elements are already rendered that data from API
+    const oldElements = Array.from(this._parentEL.querySelectorAll('*'));
+``
+    // update changed text
+    newElements.forEach((newEl, i) => {
+      const oldEl = oldElements[i];
+
+      // compare old elements with new elements
+      if (
+        !newEl.isEqualNode(oldEl) &&
+        newEl.firstChild?.nodeValue.trim() !== ''
+      ) {
+        oldEl.textContent = newEl.textContent;
+      }
+
+      // update changed attributes
+      if (!newEl.isEqualNode(oldEl)) {
+        console.log(newEl);
+        Array.from(newEl.attributes).forEach(attr => {
+          oldEl.setAttribute(attr.name, attr.value);
+        });
+      }
+    });
+  }
+
   _clear() {
     this._parentEL.innerHTML = '';
   }
