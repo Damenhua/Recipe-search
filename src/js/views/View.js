@@ -13,9 +13,6 @@ export default class ResultView {
   }
 
   update(data) {
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderError();
-
     this._data = data;
     const newMarkup = this._generateMarkup();
 
@@ -27,7 +24,7 @@ export default class ResultView {
     const newElements = Array.from(newDOM.querySelectorAll('*'));
     // this old elements are already rendered that data from API
     const oldElements = Array.from(this._parentEL.querySelectorAll('*'));
-``
+    ``;
     // update changed text
     newElements.forEach((newEl, i) => {
       const oldEl = oldElements[i];
