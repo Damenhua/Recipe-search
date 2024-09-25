@@ -2,12 +2,15 @@ import icons from 'url:../../img/icons.svg'; //parcel@2
 
 export default class ResultView {
   _data;
-  render(data) {
+  render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
     this._data = data;
+
     const markup = this._generateMarkup();
+    if (!render) return markup;
+
     this._clear();
     this._parentEL.insertAdjacentHTML('afterbegin', markup);
   }
@@ -18,7 +21,6 @@ export default class ResultView {
 
     // creat virtual DOM
     const newDOM = document.createRange().createContextualFragment(newMarkup);
-    console.log(newDOM);
 
     //get all elements from new DOM,and array from
     const newElements = Array.from(newDOM.querySelectorAll('*'));
@@ -39,7 +41,6 @@ export default class ResultView {
 
       // update changed attributes
       if (!newEl.isEqualNode(oldEl)) {
-        console.log(newEl);
         Array.from(newEl.attributes).forEach(attr => {
           oldEl.setAttribute(attr.name, attr.value);
         });
