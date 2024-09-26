@@ -1,6 +1,6 @@
 import icons from 'url:../../img/icons.svg'; //parcel@2
 
-export default class ResultView {
+export default class View {
   _data;
   render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
