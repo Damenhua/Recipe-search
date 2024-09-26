@@ -6,15 +6,13 @@ import bookmarksView from './views/bookmarksView.js';
 import paginationView from './views/paginationView.js';
 import addRecipeView from './views/addRecipeView.js';
 
-import 'core-js/actual';
-
+// Enable hot module replacement for development
 if (module.hot) {
   module.hot.accept();
 }
-
 // https://forkify-api.herokuapp.com/v2
 
-///////////////////////////////////////
+// Main function to control recipe display
 const controlRecipe = async function () {
   try {
     // resultView.renderSpinner();
@@ -22,8 +20,7 @@ const controlRecipe = async function () {
 
     // 0) Update results view to mark selected search result
     resultView.update(model.getSearchResultsPage());
-    // update bookmarks view
-    bookmarksView.update(model.state.bookmarks);
+
     // 1) Get id from URL
     const id = window.location.hash.slice(1);
     if (!id) return;
@@ -34,13 +31,16 @@ const controlRecipe = async function () {
 
     // 3) Rendering recipe
     recipeView.render(recipe);
+
+    // update bookmarks view
+    bookmarksView.update(model.state.bookmarks);
   } catch (err) {
     recipeView.renderError();
     console.error(err);
   }
 };
 
-//  Searching for results
+// Function to handle search results
 const controlSearchResults = async function () {
   try {
     resultView.renderSpinner();
@@ -64,6 +64,7 @@ const controlSearchResults = async function () {
   }
 };
 
+// Function to handle pagination
 const controlPagination = function (goToPage) {
   // 1) render NEW results
   resultView.render(model.getSearchResultsPage(goToPage));
@@ -72,6 +73,7 @@ const controlPagination = function (goToPage) {
   paginationView.render(model.state.search);
 };
 
+// Function to update recipe servings
 const controlServings = function (newServings) {
   // 1)update the recipe servings (in state)
   model.updateServings(newServings);
@@ -81,6 +83,7 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
+// Function to add or remove bookmarks
 const controlAddBookmark = function () {
   // 1) add/remove bookmark
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
@@ -95,10 +98,18 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+// Function to render bookmarks
 const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+// Function to handle adding new recipe (to be implemented)
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+  model.uploadRecipe(newRecipe);
+};
+
+// Initialization function to set up event handlers
 const init = function () {
   // 1) search
   searchView.addHandlerSearch(controlSearchResults);
@@ -107,15 +118,14 @@ const init = function () {
   // 2.5) render bookmarks
   bookmarksView.addHandlerRender(controlBookmarks);
 
-
   // 3) pagination
   paginationView.addHandlerPageClick(controlPagination);
   // 4) update servings
   recipeView.addHandlerUpdateServings(controlServings);
   // 5) add/remove bookmark
   recipeView.addHandlerBookmark(controlAddBookmark);
-  console.log(model.state.bookmarks);
+  // 6) add recipe
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 
 init();
-
