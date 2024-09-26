@@ -97,9 +97,25 @@ export const deleteBookmark = function (id) {
 const init = function () {
   const data = localStorage.getItem('bookmarks');
   state.bookmarks = JSON.parse(data);
-  state.recipe = JSON.parse(data);
-  console.log(state.bookmarks);
-  console.log(state.recipe);
 };
 
 init();
+
+export const uploadRecipe = async function (newRecipe) {
+  try {
+    // console.log(Object.entries(newRecipe));
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        const [quantity, unit, description] = ing[1]
+          .replaceAll(' ', '')
+          .split(',');
+        return { quantity, unit, description };
+      });
+    console.log(ingredients);
+    console.log(Object.entries(newRecipe)
+    .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== ''));
+  } catch (err) {
+    console.error(err);
+  }
+};
