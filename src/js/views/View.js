@@ -78,7 +78,7 @@ export default class View {
   }
 
   // render success message
-  renderSuccess(message = this._message) {
+  renderSuccess(message = this._successMessage) {
     const markup = `<div class="message">
             <div>
               <svg>

@@ -1,4 +1,5 @@
 import * as model from './model.js';
+import { MODAL_CLOSE_SEC } from './config.js';
 import searchView from './views/searchView.js';
 import recipeView from './views/recipeView.js';
 import resultView from './views/resultView.js';
@@ -104,12 +105,31 @@ const controlBookmarks = function () {
 };
 
 // Function to handle adding new recipe (to be implemented)
-const controlAddRecipe = function (newRecipe) {
-  console.log(newRecipe);
-  model.uploadRecipe(newRecipe);
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    // Render spinner
+    addRecipeView.renderSpinner();
+
+    // Upload the new recipe data
+    await model.uploadRecipe(newRecipe);
+
+    // Render recipe
+    recipeView.render(model.state.recipe);
+
+    // Render success message
+    addRecipeView.renderSuccess();
+
+    // close form window
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    console.error('!!!', err);
+    addRecipeView.renderError(err.message);
+  }
 };
 
-// Initialization function to set up event handlers
+// Initialization function to set up event handler
 const init = function () {
   // 1) search
   searchView.addHandlerSearch(controlSearchResults);
