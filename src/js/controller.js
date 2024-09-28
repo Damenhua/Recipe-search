@@ -58,8 +58,6 @@ const controlSearchResults = async function () {
 
     // 4) render initial pagination buttons
     paginationView.render(model.state.search);
-
-    console.log(model.state.search);
   } catch (err) {
     console.error(err);
   }
@@ -90,8 +88,6 @@ const controlAddBookmark = function () {
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
   else model.deleteBookmark(model.state.recipe.id);
 
-  console.log(model.state.recipe.bookmarked);
-
   // 2) update recipe view
   recipeView.update(model.state.recipe);
 
@@ -108,6 +104,7 @@ const controlBookmarks = function () {
 const controlAddRecipe = async function (newRecipe) {
   try {
     // Render spinner
+
     addRecipeView.renderSpinner();
 
     // Upload the new recipe data
@@ -119,6 +116,19 @@ const controlAddRecipe = async function (newRecipe) {
     // Render success message
     addRecipeView.renderSuccess();
 
+    // Render bookmarks view
+    bookmarksView.render(model.state.bookmarks);
+
+    // change ID in URL
+    //使用 replaceState 而不是 pushState：>>目前正常
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    ////test
+    // const newId = model.state.recipe.id;
+    // window.location.hash = newId;
+    // console.log('Attempting to change URL hash to:', newId);
+
+    // window.history.back();
     // close form window
     setTimeout(function () {
       addRecipeView.toggleWindow();
