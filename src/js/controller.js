@@ -6,7 +6,7 @@
  * - Pagination
  * - Bookmarking
  * - Adding new recipes
- * 
+ *
  * It imports necessary modules and initializes event handlers.
  */
 
@@ -191,6 +191,7 @@ const init = function () {
   recipeView.addHandlerBookmark(controlAddBookmark);
   // 6) add recipe
   addRecipeView.addHandlerUpload(controlAddRecipe);
+  console.log('Welcome to the application!');
 };
 
 init();
