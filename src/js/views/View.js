@@ -2,6 +2,18 @@ import icons from 'url:../../img/icons.svg'; //parcel@2
 
 export default class View {
   _data;
+
+/**
+ * Render the received object to the DOM
+ * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
+ * @param {boolean} [render=true] If set to false, the method will return the markup string instead of rendering to the DOM
+ * @returns {undefined | string} A markup string is returned if render = false
+ * @this {Object} View instance
+ * @author Jeffrey
+ * @date 2024-09-30
+ * @version 1.0
+ * @todo Finish implementation
+ */
   render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
@@ -15,6 +27,10 @@ export default class View {
     this._parentEL.insertAdjacentHTML('afterbegin', markup);
   }
 
+  /**
+   * Update the DOM with new data without re-rendering the entire view
+   * @param {Object | Object[]} data The new data to update the view with
+   */
   update(data) {
     this._data = data;
     const newMarkup = this._generateMarkup();
@@ -48,10 +64,18 @@ export default class View {
     });
   }
 
+  /**
+   * Clear the parent element's content
+   * @private
+   */
   _clear() {
     this._parentEL.innerHTML = '';
   }
 
+  /**
+   * Render a spinner to indicate loading state
+   * This method clears the parent element and inserts a spinner icon
+   */
   renderSpinner() {
     const markup = `
       <div class="spinner">
@@ -63,7 +87,10 @@ export default class View {
     this._clear();
     this._parentEL.insertAdjacentHTML('afterbegin', markup);
   }
-  // render error message
+  /**
+   * Render an error message to the DOM
+   * @param {string} [message=this._errorMessage] The error message to display
+   */
   renderError(message = this._errorMessage) {
     const markup = `<div class="error">
             <div>
@@ -77,7 +104,10 @@ export default class View {
     this._parentEL.insertAdjacentHTML('afterbegin', markup);
   }
 
-  // render success message
+    /**
+   * Render a success message to the DOM
+   * @param {string} [message=this._successMessage] The success message to display
+   */
   renderSuccess(message = this._successMessage) {
     const markup = `<div class="message">
             <div>

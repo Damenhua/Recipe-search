@@ -1,3 +1,15 @@
+/**
+ * Controller module for the recipe application.
+ * This module handles the main application logic, including:
+ * - Recipe display and manipulation
+ * - Search functionality
+ * - Pagination
+ * - Bookmarking
+ * - Adding new recipes
+ * 
+ * It imports necessary modules and initializes event handlers.
+ */
+
 import * as model from './model.js';
 import { MODAL_CLOSE_SEC } from './config.js';
 import searchView from './views/searchView.js';
@@ -13,7 +25,10 @@ if (module.hot) {
 }
 // https://forkify-api.herokuapp.com/v2
 
-// Main function to control recipe display
+/**
+ * Handles the display and updating of a recipe.
+ * Fetches recipe data, updates the view, and handles bookmarks.
+ */
 const controlRecipe = async function () {
   try {
     // resultView.renderSpinner();
@@ -41,7 +56,10 @@ const controlRecipe = async function () {
   }
 };
 
-// Function to handle search results
+/**
+ * Manages the search functionality.
+ * Retrieves search query, loads results, and updates the view.
+ */
 const controlSearchResults = async function () {
   try {
     resultView.renderSpinner();
@@ -63,7 +81,10 @@ const controlSearchResults = async function () {
   }
 };
 
-// Function to handle pagination
+/**
+ * Handles pagination for search results.
+ * @param {number} goToPage - The page number to display
+ */
 const controlPagination = function (goToPage) {
   // 1) render NEW results
   resultView.render(model.getSearchResultsPage(goToPage));
@@ -72,7 +93,10 @@ const controlPagination = function (goToPage) {
   paginationView.render(model.state.search);
 };
 
-// Function to update recipe servings
+/**
+ * Updates the servings for a recipe.
+ * @param {number} newServings - The new number of servings
+ */
 const controlServings = function (newServings) {
   // 1)update the recipe servings (in state)
   model.updateServings(newServings);
@@ -82,7 +106,10 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
-// Function to add or remove bookmarks
+/**
+ * Manages the bookmarking of recipes.
+ * Adds or removes bookmarks and updates the view.
+ */
 const controlAddBookmark = function () {
   // 1) add/remove bookmark
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
@@ -95,12 +122,18 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-// Function to render bookmarks
+/**
+ * Renders the bookmarks view.
+ */
 const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-// Function to handle adding new recipe (to be implemented)
+/**
+ * Handles the addition of a new recipe.
+ * Uploads the recipe, updates views, and manages URL state.
+ * @param {Object} newRecipe - The new recipe data
+ */
 const controlAddRecipe = async function (newRecipe) {
   try {
     // Render spinner
@@ -139,7 +172,9 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
-// Initialization function to set up event handler
+/**
+ * Initializes the application by setting up event handlers.
+ */
 const init = function () {
   // 1) search
   searchView.addHandlerSearch(controlSearchResults);
@@ -159,3 +194,13 @@ const init = function () {
 };
 
 init();
+
+// 項目改進建議:
+
+// 顯示分頁總數
+// 允許根據時長或原料數量排序搜索結果
+// 在視圖中驗證原料輸入
+// 改進原料輸入界面
+// 添加購物清單功能
+// 實現每週餐點計劃功能
+// 使用食品API獲取營養數據

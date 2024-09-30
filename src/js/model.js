@@ -1,6 +1,24 @@
+/**
+ * Model module handling the application's data logic
+ * @module model
+ */
+
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
 // import { getJSON, sendJSON } from './helper.js';
 import { AJAX } from './helper.js';
+
+/**
+ * Application state object
+ * @typedef {Object} State
+ * @property {Object} recipe - Current recipe
+ * @property {Object} search - Search-related information
+ * @property {Array} bookmarks - List of bookmarks
+ */
+
+/**
+ * Application state
+ * @type {State}
+ */
 export const state = {
   recipe: {},
   search: {
@@ -12,6 +30,9 @@ export const state = {
   bookmarks: [],
 };
 
+/**
+ * Initialization function, loads bookmarks from local storage
+ */
 const init = function () {
   const data = localStorage.getItem('bookmarks');
   if (data) state.bookmarks = JSON.parse(data);
@@ -19,6 +40,11 @@ const init = function () {
 
 init();
 
+/**
+ * Creates a recipe object
+ * @param {Object} data - Recipe data returned from API
+ * @returns {Object} Formatted recipe object
+ */
 const createRecipeObject = function (data) {
   const { recipe } = data.data;
   return {
@@ -34,6 +60,11 @@ const createRecipeObject = function (data) {
   };
 };
 
+/**
+ * Loads a recipe
+ * @param {string} id - Recipe ID
+ * @throws {Error} If loading fails
+ */
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}/${id}?key=${KEY}`);
@@ -50,6 +81,11 @@ export const loadRecipe = async function (id) {
   }
 };
 
+/**
+ * Loads search results
+ * @param {string} query - Search query
+ * @throws {Error} If loading fails
+ */
 export const loadSearchResults = async function (query) {
   try {
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
@@ -70,6 +106,11 @@ export const loadSearchResults = async function (query) {
   }
 };
 
+/**
+ * Gets search results for a specific page
+ * @param {number} [page=state.search.page] - Page number
+ * @returns {Array} Search results for the current page
+ */
 export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page;
   const start = (page - 1) * state.search.resultsPerPage; // 0
@@ -77,20 +118,28 @@ export const getSearchResultsPage = function (page = state.search.page) {
   return state.search.results.slice(start, end);
 };
 
+/**
+ * Updates the servings of a recipe
+ * @param {number} newServings - New number of servings
+ */
 export const updateServings = function (newServings) {
-  // quantity/serving * new servings
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity / state.recipe.servings) * newServings;
   });
-
   state.recipe.servings = newServings;
 };
 
-// Local Storage, persist bookmarks
+/**
+ * Persists bookmarks to local storage
+ */
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
+/**
+ * Adds a bookmark
+ * @param {Object} recipe - Recipe to be bookmarked
+ */
 export const addBookmark = function (recipe) {
   // add bookmark
   state.bookmarks.push(recipe);
@@ -100,6 +149,10 @@ export const addBookmark = function (recipe) {
   persistBookmarks();
 };
 
+/**
+ * Deletes a bookmark
+ * @param {string} id - ID of the bookmark to be deleted
+ */
 export const deleteBookmark = function (id) {
   const index = state.bookmarks.findIndex(el => el.id === id);
   if (index === -1) return;
@@ -108,14 +161,17 @@ export const deleteBookmark = function (id) {
   persistBookmarks();
 };
 
+/**
+ * Uploads a new recipe
+ * @param {Object} newRecipe - Data for the new recipe
+ * @throws {Error} If upload fails or format is incorrect
+ */
 export const uploadRecipe = async function (newRecipe) {
-  // console.log(Object.entries(newRecipe));
   try {
     const ingredients = Object.entries(newRecipe)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
         const ingArr = ing[1].split(',').map(el => el.trim());
-        // const ingArr = ing[1].replaceAll(' ', '').split(',');
         if (ingArr.length !== 3)
           throw new Error('Wrong format, please use the correct format');
         const [quantity, unit, description] = ingArr;
