@@ -79,9 +79,7 @@ class RecipeView extends View {
             </div>
           </div>
 
-          <div class="recipe__user-generated ${
-            this._data.key ? '' : 'hidden'
-          }">
+          <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
             <svg>
               <use href="${icons}#icon-user"></use>
             </svg>
@@ -126,7 +124,9 @@ class RecipeView extends View {
         `;
   }
   _generateMarkupIngradient(ing) {
-    return `<li class="recipe__ingredient">
+    // 添加錯誤處理
+    try {
+      return `<li class="recipe__ingredient">
     <svg class="recipe__icon">
       <use href="${icons}#icon-check"></use>
     </svg>
@@ -138,6 +138,10 @@ class RecipeView extends View {
       ${ing.description}
     </div>
   </li>`;
+    } catch (error) {
+      console.error('Error in _generateMarkupIngradient:', error, ing);
+      return `<li>Error processing ingredient</li>`;
+    }
   }
 }
 
