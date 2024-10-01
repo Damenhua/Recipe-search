@@ -19,6 +19,9 @@ import bookmarksView from './views/bookmarksView.js';
 import paginationView from './views/paginationView.js';
 import addRecipeView from './views/addRecipeView.js';
 
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 // Enable hot module replacement for development
 if (module.hot) {
   module.hot.accept();
