@@ -34,24 +34,22 @@ if (module.hot) {
  */
 const controlRecipe = async function () {
   try {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+
     // resultView.renderSpinner();
     recipeView.renderSpinner();
 
     // 0) Update results view to mark selected search result
     resultView.update(model.getSearchResultsPage());
 
-    // 1) Get id from URL
-    const id = window.location.hash.slice(1);
-    if (!id) return;
-
-    // 2) loading recipe
+    // 1) loading recipe
     await model.loadRecipe(id);
     const { recipe } = model.state;
 
-    // 3) Rendering recipe
+    // 2) Rendering recipe
     recipeView.render(recipe);
-
-    // update bookmarks view
+    // 3) update bookmarks view
     bookmarksView.update(model.state.bookmarks);
   } catch (err) {
     recipeView.renderError();
