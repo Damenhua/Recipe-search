@@ -3,24 +3,24 @@ import icons from 'url:../../img/icons.svg'; //parcel@2
 export default class View {
   _data;
 
-/**
- * Render the received object to the DOM
- * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
- * @param {boolean} [render=true] If set to false, the method will return the markup string instead of rendering to the DOM
- * @returns {undefined | string} A markup string is returned if render = false
- * @this {Object} View instance
- * @author Jeffrey
- * @date 2024-09-30
- * @version 1.0
- * @todo Finish implementation
- */
-  render(data, render = true) {
+  /**
+   * Render the received object to the DOM
+   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
+   * @param {boolean} [render=true] If set to false, the method will return the markup string instead of rendering to the DOM
+   * @returns {undefined | string} A markup string is returned if render = false
+   * @this {Object} View instance
+   * @author Jeffrey
+   * @date 2024-09-30
+   * @version 1.0
+   * @todo Finish implementation
+   */
+  render(data, render = true, isSearchResult = false) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
     this._data = data;
 
-    const markup = this._generateMarkup();
+    const markup = this._generateMarkup(isSearchResult);
     if (!render) return markup;
 
     this._clear();
@@ -104,7 +104,7 @@ export default class View {
     this._parentEL.insertAdjacentHTML('afterbegin', markup);
   }
 
-    /**
+  /**
    * Render a success message to the DOM
    * @param {string} [message=this._successMessage] The success message to display
    */

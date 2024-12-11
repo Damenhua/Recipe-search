@@ -8,7 +8,7 @@ class ResultView extends View {
 
   _generateMarkup() {
     return this._data
-      .map(result => PreviewView.render(result, false))
+      .map(result => PreviewView.render(result, false, true))
       .join('');
   }
 }

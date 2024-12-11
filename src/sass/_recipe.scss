@@ -176,4 +176,13 @@
   &__publisher {
     font-weight: 700;
   }
+
+  &__delete {
+    position: absolute;
+    right: 3rem;
+    top: 3.75rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+  }
 }

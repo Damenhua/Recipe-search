@@ -4,7 +4,7 @@ import icons from 'url:../../img/icons.svg';
 class PreviewView extends View {
   _parentEL = '';
 
-  _generateMarkup() {
+  _generateMarkup(isSearchResult = false) {
     const id = window.location.hash.slice(1);
     return `
         <li class="preview">
@@ -24,7 +24,16 @@ class PreviewView extends View {
                     <use href="${icons}#icon-user"></use>
                   </svg>
                 </div>
+               
               </div>
+               ${
+                 // 使用傳入的參數來判斷是否顯示刪除按鈕
+                 isSearchResult && this._data.key
+                   ? `<button class="preview__delete">
+                      &times;
+                     </button>`
+                   : ''
+               }
             </a>
           </li>
         `;

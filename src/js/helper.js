@@ -8,22 +8,31 @@ const timeout = function (s) {
   });
 };
 
-export const AJAX = async function (url, uploadData = undefined) {
+export const AJAX = async function (
+  url,
+  uploadData = undefined,
+  method = 'GET'
+) {
   try {
-    const fetchPro = uploadData
-      ? fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(uploadData),
-        })
-      : fetch(url);
-    const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
-    const data = await res.json();
+    const fetchOptions =
+      method === 'GET'
+        ? fetch(url)
+        : fetch(url, {
+            method: method,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: method !== 'DELETE' ? JSON.stringify(uploadData) : null,
+          });
 
-    // error handling
-    if (!res.ok) throw new Error(`${data.message} ${res.status}`);
+    const res = await Promise.race([fetchOptions, timeout(TIMEOUT_SEC)]);
+    if (!res.ok) throw new Error(`(${res.status})`);
+
+    // 只有在非 DELETE 請求時才解析 JSON
+    if (method === 'DELETE') {
+      return { status: 'success' };
+    }
+    const data = await res.json();
 
     return data;
   } catch (err) {

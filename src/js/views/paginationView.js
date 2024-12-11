@@ -5,15 +5,13 @@ class PaginationView extends View {
   _parentEL = document.querySelector('.pagination');
 
   addHandlerPageClick(handler) {
-    this._parentEL.addEventListener('click', function(e) {
+    this._parentEL.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--inline');
-      if(!btn) return;
+      if (!btn) return;
       const goToPage = +btn.dataset.goto;
 
-      console.log(goToPage);
-
       handler(goToPage);
-    })
+    });
   }
 
   _generateMarkup() {
@@ -21,8 +19,6 @@ class PaginationView extends View {
     const totalPage = Math.ceil(
       this._data.results.length / this._data.resultsPerPage
     );
-
-    
 
     // 1) page 1, and there are other pages
     if (curPage === 1 && totalPage > 1) {
@@ -36,7 +32,9 @@ class PaginationView extends View {
 
     // 3) Other page
     if (curPage < totalPage) {
-      return this._generatePrevButton(curPage) + this._generateNextButton(curPage);
+      return (
+        this._generatePrevButton(curPage) + this._generateNextButton(curPage)
+      );
     }
 
     // 4) just one page
@@ -45,7 +43,9 @@ class PaginationView extends View {
 
   _generatePrevButton(curPage) {
     return `
-      <button data-goto="${curPage - 1}" class="btn--inline pagination__btn--prev">
+      <button data-goto="${
+        curPage - 1
+      }" class="btn--inline pagination__btn--prev">
         <svg class="search__icon">
           <use href="${icons}#icon-arrow-left"></use>
         </svg>
@@ -53,10 +53,12 @@ class PaginationView extends View {
       </button>
     `;
   }
-  
+
   _generateNextButton(curPage) {
     return `
-      <button data-goto="${curPage + 1}" class="btn--inline pagination__btn--next">
+      <button data-goto="${
+        curPage + 1
+      }" class="btn--inline pagination__btn--next">
         <span> Page ${curPage + 1}</span>
         <svg class="search__icon">
           <use href="${icons}#icon-arrow-right"></use>

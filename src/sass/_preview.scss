@@ -83,6 +83,28 @@
     font-weight: 600;
   }
 
+  &__delete {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: $color-primary;
+    transition: all 0.2s;
+
+    &:hover {
+      color: $color-grad-2;
+      transform: translateY(-50%) scale(1.1);
+    }
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
   &__user-generated {
     background-color: darken($color-grey-light-2, 2%);
 

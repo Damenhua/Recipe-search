@@ -60,6 +60,44 @@ const createRecipeObject = function (data) {
   };
 };
 
+export const deleteRecipe = async function (id) {
+  try {
+    // check if the recipe is client's recipe
+    const recipe = state.search.results.find(r => r.id === id);
+    if (!recipe || !recipe.key) {
+      throw new Error('only delete your own recipes!');
+    }
+
+    // delete recipe
+    await AJAX(`${API_URL}/${id}?key=${KEY}`, undefined, 'DELETE');
+
+    // remove recipe from search results
+    state.search.results = state.search.results.filter(r => r.id !== id);
+
+    // remove recipe from bookmarks
+    const bookmarkIndex = state.bookmarks.findIndex(b => b.id === id);
+    if (bookmarkIndex > -1) {
+      state.bookmarks.splice(bookmarkIndex, 1);
+
+      if (state.bookmarks.length === 0) {
+        localStorage.removeItem('bookmarks');
+      } else {
+        localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+      }
+
+      persistBookmarks();
+    }
+
+    // if the recipe is currently displayed, clear it
+    if (state.recipe.id === id) {
+      state.recipe = {};
+    }
+  } catch (err) {
+    console.error('💥', err);
+    throw err;
+  }
+};
+
 /**
  * Loads a recipe
  * @param {string} id - Recipe ID
@@ -67,9 +105,8 @@ const createRecipeObject = function (data) {
  */
 export const loadRecipe = async function (id) {
   try {
-    const data = await AJAX(`${API_URL}/${id}?key=${KEY}`);
+    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
     state.recipe = createRecipeObject(data);
-
     // check if the recipe is already bookmarked
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
@@ -173,7 +210,9 @@ export const uploadRecipe = async function (newRecipe) {
         const ingArr = ing[1].split(',').map(el => el.trim());
         if (ingArr.length !== 3)
           throw new Error('Wrong format, please use the correct format');
+
         const [quantity, unit, description] = ingArr;
+
         return { quantity: quantity ? +quantity : null, unit, description };
       });
 
@@ -186,11 +225,20 @@ export const uploadRecipe = async function (newRecipe) {
       cooking_time: +newRecipe.cookingTime,
       ingredients,
     };
-
-    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
+    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe, 'POST');
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
-    console.log('Recipe created with ID:', state.recipe.id);
+
+    //
+    const newRecipePreview = {
+      id: state.recipe.id,
+      title: state.recipe.title,
+      publisher: state.recipe.publisher,
+      image: state.recipe.image,
+      ...(state.recipe.key && { key: state.recipe.key }),
+    };
+    //
+    state.search.results.unshift(newRecipePreview);
 
     // return state.recipe.id;
   } catch (err) {

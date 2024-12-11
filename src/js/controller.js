@@ -18,6 +18,7 @@ import resultView from './views/resultView.js';
 import bookmarksView from './views/bookmarksView.js';
 import paginationView from './views/paginationView.js';
 import addRecipeView from './views/addRecipeView.js';
+import deleteRecipeView from './views/deleteRecipeView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -153,23 +154,52 @@ const controlAddRecipe = async function (newRecipe) {
     // Render bookmarks view
     bookmarksView.render(model.state.bookmarks);
 
+    // 更新搜尋結果視圖
+    resultView.render(model.getSearchResultsPage());
+
     // change ID in URL
-    //使用 replaceState 而不是 pushState：>>目前正常
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
 
-    ////test
-    // const newId = model.state.recipe.id;
-    // window.location.hash = newId;
-    // console.log('Attempting to change URL hash to:', newId);
-
-    // window.history.back();
-    // close form window
     setTimeout(function () {
       addRecipeView.toggleWindow();
+
+      // 清空表單內容
+      addRecipeView._parentEL.reset();
     }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
-    console.error('!!!', err);
+    console.error('💥', err);
     addRecipeView.renderError(err.message);
+  }
+};
+
+/**
+ * Handles the deletion of a recipe.
+ * Deletes the recipe and updates the view.
+ */
+const controlDeleteRecipe = async function (id) {
+  try {
+    if (!confirm('確定要刪除這個食譜嗎？')) return;
+
+    recipeView.renderSpinner();
+
+    // 刪除食譜
+    await model.deleteRecipe(id);
+
+    // 更新搜尋結果視圖
+    resultView.render(model.getSearchResultsPage());
+
+    // 重新渲染書籤列表
+    bookmarksView.render(model.state.bookmarks);
+
+    // 顯示成功訊息
+    recipeView.renderSuccess('Recipe deleted successfully!');
+
+    // 清除 URL hash
+    window.history.pushState(null, '', window.location.pathname);
+  } catch (err) {
+    console.error('💥', err);
+    recipeView.renderError(err.message);
+    return;
   }
 };
 
@@ -192,17 +222,8 @@ const init = function () {
   recipeView.addHandlerBookmark(controlAddBookmark);
   // 6) add recipe
   addRecipeView.addHandlerUpload(controlAddRecipe);
-  console.log('Welcome to the application!');
+  // 7) delete recipe
+  deleteRecipeView.addHandlerDelete(controlDeleteRecipe);
 };
 
 init();
-
-// 項目改進建議:
-
-// 顯示分頁總數
-// 允許根據時長或原料數量排序搜索結果
-// 在視圖中驗證原料輸入
-// 改進原料輸入界面
-// 添加購物清單功能
-// 實現每週餐點計劃功能
-// 使用食品API獲取營養數據
