@@ -82,7 +82,7 @@ export default class View {
         <svg>
           <use href="${icons}#icon-loader"></use>
         </svg>
-       </div>  
+      </div>
     `;
     this._clear();
     this._parentEL.insertAdjacentHTML('afterbegin', markup);

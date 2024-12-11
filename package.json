@@ -1,24 +1,5 @@
 {
-  "name": "forkify",
-  "version": "1.0.0",
-  "description": "search recipe",
-  "default": "index.html",
-  "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html --dist-dir ./dist --no-scope-hoist",
-    "clean": "rm -rf .parcel-cache dist"
-  },
-  "author": "Jeffrey",
-  "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.12.0",
-    "parcel": "^2.0.0",
-    "svgo": "^3.2.0"
-  },
-  "browserslist": "last 2 versions, > 0.5% and ie >= 11",
-  "dependencies": {
-    "core-js": "^3.38.1",
-    "fracty": "^1.0.11",
-    "regenerator-runtime": "^0.14.1"
+    "@parcel/resolver-default": "^2.13.2"
   }
 }
